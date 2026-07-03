@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <!-- CSP запрещает инлайн-скрипты и подгрузку с посторонних доменов (защита от XSS) -->
+  <meta http-equiv="Content-Security-Policy"
+        content="default-src 'self'; style-src 'self' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self' data:; script-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self';">
+  <title>My ToDo — список задач</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:wght@600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+  <!-- CSS подгружается синхронно, но это критический стиль, нужный для первого рендера -->
+  <link rel="stylesheet" href="css/style.min.css">
+</head>
+<body>
+
+  <div class="app">
+    <header class="app__header">
+      <div>
+        <h1 class="app__title">My ToDo</h1>
+        <p class="app__subtitle">Бумажный блокнот для цифровых дел</p>
+      </div>
+    </header>
+
+    <form id="task-form" class="task-form" autocomplete="off">
+      <input
+        id="task-input"
+        class="task-form__input"
+        type="text"
+        maxlength="200"
+        placeholder="Что нужно сделать?"
+        aria-label="Текст новой задачи"
+        required
+      >
+      <button type="submit" class="task-form__submit" aria-label="Добавить задачу">
+        <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true">
+          <path d="M12 5v14M5 12h14" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+        </svg>
+        Добавить
+      </button>
+    </form>
+
+    <div class="toolbar">
+      <div class="filters">
+        <button class="filters__btn is-active" data-filter="all">Все</button>
+        <button class="filters__btn" data-filter="active">Активные</button>
+        <button class="filters__btn" data-filter="done">Выполненные</button>
+      </div>
+
+      <div class="sort">
+        <label class="sort__label" for="sort-select">Сортировка</label>
+        <select id="sort-select" class="sort__select">
+          <option value="created-desc">Сначала новые</option>
+          <option value="created-asc">Сначала старые</option>
+          <option value="alpha-asc">По алфавиту (А–Я)</option>
+          <option value="status">Сначала невыполненные</option>
+        </select>
+      </div>
+    </div>
+
+    <ul id="task-list" class="task-list" aria-live="polite"></ul>
+
+    <p id="empty-state" class="empty-state" hidden>Пока ничего нет — добавьте первую задачу выше.</p>
+
+    <footer class="app__footer">
+      <span id="task-count">0 задач</span>
+      <button id="clear-done" class="app__clear" type="button">Удалить выполненные</button>
+    </footer>
+  </div>
+
+  <!-- DOMPurify — санитизация ввода пользователя перед вставкой в DOM -->
+  <script src="js/vendor/purify.min.js" defer></script>
+  <script src="js/app.min.js" defer></script>
+</body>
+</html>
